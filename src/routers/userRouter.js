@@ -1,8 +1,8 @@
 const express = require("express")
 const sharp = require("sharp")
-const { sendWelcomeEmail, sendGoodbyeEmail } = require("../emails/account.js")
-const auth = require("../middleware/auth.js")
-const User = require("../models/userModel.js")
+const { sendWelcomeEmail, sendGoodbyeEmail } = require("../emails/account")
+const auth = require("../middleware/auth")
+const User = require("../models/userModel")
 
 const multer = require("multer")
 const upload = multer({
@@ -11,7 +11,7 @@ const upload = multer({
 	},
 	fileFilter (req, file, cb) {
 		if(!file.originalname.match(/\.(jpg|jpeg|png)$/)){
-			return cb(new Error("Please upload an image file!"))
+			return cb(new Error("Please upload an image file! Allowed jpg|jpeg|png"))
 		}
 
 		cb(undefined, true)
@@ -59,7 +59,7 @@ router.post("/users", async (req, res) => {
 		sendWelcomeEmail(user.email, user.name)
 
 		res.status(201).send({user, token})
-	}catch(e) {
+	} catch(e) {
 		res.status(400).send(e)
 	}
 })
